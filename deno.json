@@ -1,0 +1,6 @@
+{
+  "name": "@falentio/ctx",
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1"
+  }
+}
