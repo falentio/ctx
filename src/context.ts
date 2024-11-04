@@ -5,22 +5,22 @@ const INIT_SYMBOL = Symbol("ContextManager init symbol")
 export class ContextManager<Init = void> {
     private als = new AsyncLocalStorage<Map<unknown, unknown>>()
 
-    initValue() {
+    initValue(): Init {
         const store = this.als.getStore()
         if (!store) {
             throw new Error("please call ContextManager#run first")
         }
-        return store.get(INIT_SYMBOL)
+        return store.get(INIT_SYMBOL) as Init
     }
 
-    run<T>(fn: () => T, init: Init) {
+    run<T>(fn: () => T, init: Init): T {
         const store = new Map<unknown, unknown>([
             [INIT_SYMBOL, init]
         ])
         return this.als.run(store, fn)
     }
     
-    create<T>(fn: () => T) {
+    create<T>(fn: () => T): () => T {
         return () => {
             const store = this.als.getStore()
             if (!store) {
